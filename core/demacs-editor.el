@@ -1,31 +1,19 @@
 ;;; demacs-editor.el --- Editor configuration.
-
+;;
 ;;; Commentary:
+;;
 ;; This file contains editor configuration options.
-
-;; The following packages are loaded:
-;; - multiple-cursors
-;; - whitespace-cleanup-mode
-;; - highlight-numbers
-
+;;
+;;
 ;;; Code:
-
 
 ;; Default tab width.
 (defvar demacs/c-mode-tab-width 2
   "Default tab width for C, C++, Java, Objective-C.")
 
-
-;; If you enable Delete Selection mode, a minor mode, then inserting text while
-;; the mark is active causes the selected text to be deleted first.
-;; This is normally default behaviour for text editors.
-(delete-selection-mode t)
-
-;; ----------------------------------------------------------------------------
 ;;
 ;; Functions
 ;;
-;; ----------------------------------------------------------------------------
 
 (defun demacs/untabify-except-makefiles ()
   "Replace tabs with spaces except in makefiles."
@@ -55,11 +43,9 @@
   "Toggle commenting/uncommenting a region or line."
   (demacs/comment-or-uncomment-region-or-line))
 
-;; ----------------------------------------------------------------------------
 ;;
 ;; Programming mode hooks
 ;;
-;; ----------------------------------------------------------------------------
 
 (defun demacs/prog-mode-hook ()
   "Customization for all programming modes."
@@ -90,39 +76,9 @@
   "Customization for makegile mode."
   (setq indent-tabs-mode t))
 
-
-;; ----------------------------------------------------------------------------
-;;
-;; Packages
-;;
-;; ----------------------------------------------------------------------------
-
-;; Whitespace cleanup
-(use-package whitespace-cleanup-mode
-  :straight t
-  :custom
-  (show-trailing-whitespace t)
-  :config
-  (global-whitespace-cleanup-mode 1))
-
-;; YASnippet is a template system for Emacs. It allows you to type an
-;; abbreviation and automatically expand it into function templates.
-;; Bundled language templates include: C, C++, C#, Perl, Python, Ruby,
-;; SQL, LaTeX, HTML, CSS and more.
-(use-package yasnippet
-  :straight t
-  :diminish yas-minor-mode
-  :config
-  (yas-global-mode)
-  :custom
-  (yas-prompt-functions '(yas-completing-prompt)))
-
-
-;; ----------------------------------------------------------------------------
 ;;
 ;; Hooks
 ;;
-;; ----------------------------------------------------------------------------
 
 (add-hook 'prog-mode-hook #'demacs/prog-mode-hook)
 (add-hook 'c-mode-common-hook #'demacs/c-mode-common-hook)
@@ -144,12 +100,9 @@
 ;; Use visual line mode when compiling.
 (add-hook 'compilation-mode-hook 'visual-line-mode)
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Key Bindings
 ;;
-;; -----------------------------------------------------------------------------
 
 ;; Will have to figure this out.
 (bind-key "C-/"   #'demacs/comment-or-uncomment-region-or-line)

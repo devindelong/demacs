@@ -1,21 +1,29 @@
 ;;; demacs-ui.el --- UI configuration.
-
+;;
 ;;; Commentary:
+;;
 ;; This file contains UI configuration options.
-
-;; The following packages are loaded:
+;;
+;;; Packages:
+;;
 ;; - bar-cursor
-;; - highlight-indent-guides
+;; - multiple-cursors
+;; - highlight-numbers
 ;; - hl-line
-
-
+;; - highlight-indent-guides
+;; - doom-modeline
+;; - treemacs
+;; - treemacs-projectile
+;; - treemacs-magit
+;; - centaur-tabs
+;; - kaolin-themes
+;; - doom-themes
+;;
 ;;; Code:
 
-;; -----------------------------------------------------------------------------
 ;;
 ;; Window Managenent
 ;;
-;; -----------------------------------------------------------------------------
 
 (defun demacs/split-window-horizontally ()
   "Split a window horizontally and balance them."
@@ -36,43 +44,18 @@
   (delete-window)
   (balance-windows))
 
-;; (defun demacs/restore-saved-window-size()
-;;   (unless (load "~/.emacs.d/whsettings" t nil t)
-;;     (setq saved-window-size '(80 30)))
-;;   (nconc default-frame-alist `((width . ,(car saved-window-size))
-;;                    (height . ,(cadr saved-window-size)))))
-
-
-;; (defun demacs/save-window-size-if-changed (&optional unused)
-;;   (let ((original-window-size  `(,(frame-width) ,(frame-height))))
-;;     (unless (equal original-window-size saved-window-size)
-;;       (with-temp-buffer
-;;         (setq saved-window-size original-window-size)
-;;         (insert (concat "(setq saved-window-size '"
-;;                         (prin1-to-string saved-window-size) ")"))
-;;         (write-file "~/.emacs.d/whsettings")))))
-
-;;  ;; Restore the saved window size.
-;; (add-hook 'after-init-hook #'demacs/restore-saved-window-size)
-
-;; ;; Save the window size if it changes,
-;; (add-hook 'window-size-change-functions #'demacs/save-window-size-if-changed)
-
 ;; Key bindings.
 (bind-key "C-x 0" #'demacs/close-window)
 (bind-key "C-x 2" #'demacs/split-window-horizontally)
 (bind-key "C-x 3" #'demacs/split-window-vertically)
 
-
-;; -----------------------------------------------------------------------------
 ;;
-;; Cursor/Line/Indentation
+;; Bar Cursor
 ;;
-;; -----------------------------------------------------------------------------
-
-;; Bar Cursor Mode
 ;; Emacs Lisp package that changes the Emacs cursor from a block into a bar. In
 ;; overwrite-mode, the cursor will change into a block.
+;;
+
 (use-package bar-cursor
   :straight t
   :after diminish
@@ -80,16 +63,24 @@
   :config
   (bar-cursor-mode 1))
 
+;;
+;; Multiple cursors
+;;
 ;; Support for multiple cursor selection and editing.
+;;
+
 (use-package multiple-cursors
   :straight t
   :bind (("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-SPC" . mc/mark-all-like-this)
-         ))
+         ("C-c C-SPC" . mc/mark-all-like-this)))
 
-;; Custom syntax highlighting
-;; Highlight numbers mode
+;;
+;; Highlight numbers
+;;
+;; Custom syntax highlighting for numbers.
+;;
+
 (use-package highlight-numbers
   :straight t
   :diminish
@@ -98,12 +89,21 @@
   :hook
   (prog-mode . highlight-numbers-mode))
 
+;;
+;; HL line
+;;
 ;; Highlight the current line.
+;;
+
 (use-package hl-line
   :straight t
   :hook
   (prog-mode . hl-line-mode)
   (text-mode . hl-line-mode))
+
+;;
+;; Highlight indent guides
+;;
 
 (use-package highlight-indent-guides
   :straight t
@@ -143,11 +143,9 @@
   ;; Only display indentation guides when in a programming mode.
   (prog-mode . highlight-indent-guides-mode))
 
-;; -----------------------------------------------------------------------------
 ;;
 ;; Doom modeline
 ;;
-;; -----------------------------------------------------------------------------
 
 (use-package doom-modeline
   :straight t
@@ -165,11 +163,9 @@
   (after-init . doom-modeline-mode))
 
 
-;; -----------------------------------------------------------------------------
 ;;
 ;; Treemacs
 ;;
-;; -----------------------------------------------------------------------------
 
 (use-package treemacs
   :straight t
@@ -258,23 +254,29 @@
         ("C-x t C-t" . treemacs-find-file)
         ("C-x t M-t" . treemacs-find-tag)))
 
+;;
+;; Treemacs projectile
+;;
+
 (use-package treemacs-projectile
   :straight t
   :after (treemacs projectile))
+
+;;
+;; Treemacs magit
+;;
 
 (use-package treemacs-magit
   :straight t
   :after (treemacs magit)
   :ensure t)
 
+;; Run treemacs on startup.
 (add-hook 'emacs-startup-hook 'treemacs)
 
-
-;; -----------------------------------------------------------------------------
 ;;
-;; Centausr Tabs
+;; Centaur Tabs
 ;;
-;; -----------------------------------------------------------------------------
 
 (use-package centaur-tabs
   :straight t
@@ -309,34 +311,7 @@
    ("C-}" . #'centaur-tabs-forward)
    ("C-|" . #'centaur-tabs-toggle-groups)))
 
-
-;; -----------------------------------------------------------------------------
-;;
-;; Themes
-;;
-;; -----------------------------------------------------------------------------
-
-(use-package kaolin-themes
-  :straight t)
-
-(use-package doom-themes
-  :straight t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  (defvar doom-themes-treemacs-theme "doom-colors")
-
-  (doom-themes-visual-bell-config)
-  (doom-themes-treemacs-config)
-  (doom-themes-org-config))
-
-(defun demacs/init-theme ()
-  (load-theme 'doom-opera t))
-
-(add-hook 'emacs-startup-hook #'demacs/init-theme)
-
+;; Provide this package.
 (provide 'demacs-ui)
 
 ;;; demacs-ui.el ends here.

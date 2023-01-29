@@ -1,14 +1,67 @@
 ;;; demacs-system.el --- System configuration.
-
+;;
 ;;; Commentary:
+;;
 ;; This file contains system configuration options.
-
+;;
+;;
+;;; Packages:
+;;
+;; - persistent-soft
+;; - unicode-fonts
+;; - ansi-color
+;; - all-the-icons
+;; - marginalia
+;; - all-the-icons-completion
+;; - pretty-mode
+;; - solaire-mode
+;; - diminish
+;; - cmake-ide
+;; - ripgrep
+;; - which-key
+;; - exec-path-from-shell
+;; - whitespace-cleanup-mode
+;; - yasnippet
+;; - projectile
+;; - helpful
+;; - dired
+;; - dired-single
+;; - all-the-icons-dired
+;; - dired-hacks-utils
+;; - dired-filter
+;; - flycheck
+;; - flycheck-posframe
+;; - prescient
+;; - company
+;; - company-prescient
+;; - company-posframe
+;; - vertico
+;; - orderless
+;; - emacs
+;; - consult
+;; - consult-flycheck
+;; - consult-company
+;; - consult-projectile
+;; - consult-lsp
+;; - consult-yasnippet
+;; - embark
+;; - embark-consult
+;; - wgrep
+;;
+;;
 ;;; Code:
 
 
+;;
+;; Prescient soft
+;;
 
 (use-package persistent-soft
   :straight t)
+
+;;
+;; Unicode fonts
+;;
 
 (use-package unicode-fonts
   :straight t
@@ -16,7 +69,10 @@
   :config
   (unicode-fonts-setup))
 
+;;
 ;; ANSI Color
+;;
+
 (use-package ansi-color
   :straight t
   :config
@@ -25,15 +81,26 @@
   :hook
   (compilation-filter . ansi-color-compilation-filter))
 
-;; All The Icons Package
+;;
+;; All The Icons
+;;
+
 (use-package all-the-icons
   :straight t
   :if (display-graphic-p))
+
+;;
+;; Marginalia
+;;
 
 (use-package marginalia
   :straight t
   :config
   (marginalia-mode))
+
+;;
+;; All the icons completion
+;;
 
 (use-package all-the-icons-completion
   :straight t
@@ -42,11 +109,17 @@
   :init
   (all-the-icons-completion-mode))
 
+;;
 ;; Pretty mode
+;;
+
 (use-package pretty-mode
   :straight t)
 
+;;
 ;; Solaire mode
+;;
+
 (use-package solaire-mode
   :straight t
   :config
@@ -54,20 +127,36 @@
   (setq solaire-mode-remap-fringe t)
   (solaire-global-mode))
 
+;;
 ;; Diminish
+;;
+;;
 ;; When we diminish a mode, we are saying we want it to continue doing its work
 ;; for us, but we no longer want to be reminded of it
+;;
+
 (use-package diminish
   :straight t
   :config
   (diminish 'visual-line-mode))
 
+;;
+;; Cmake IDE
+;;
+
 (use-package cmake-ide
   :straight t)
 
+;;
+;; Ripgrep
+;;
 
 (use-package ripgrep
   :straight t)
+
+;;
+;; Which key
+;;
 
 (use-package which-key
   :straight t
@@ -80,6 +169,10 @@
   (set-face-attribute
     'which-key-local-map-description-face nil :weight 'bold))
 
+;;
+;; Exec path from shell
+;;
+
 ;; A GNU Emacs library to ensure environment variables inside Emacs look the
 ;; same as in the user's shell. Basically commands on a shell path are
 ;; visible in emacs
@@ -88,26 +181,49 @@
   :init
   (exec-path-from-shell-initialize))
 
-
-;; -----------------------------------------------------------------------------
 ;;
-;; Window Managenent
+;; Whitespace cleanup mode
 ;;
-;; -----------------------------------------------------------------------------
 
+(use-package whitespace-cleanup-mode
+  :straight t
+  :custom
+  (show-trailing-whitespace t)
+  :config
+  (global-whitespace-cleanup-mode 1))
 
+;;
+;; YASnippet
+;;
+;;
+;; YASnippet is a template system for Emacs. It allows you to type an
+;; abbreviation and automatically expand it into function templates.
+;; Bundled language templates include: C, C++, C#, Perl, Python, Ruby,
+;; SQL, LaTeX, HTML, CSS and more.
+;;
+
+(use-package yasnippet
+  :straight t
+  :diminish yas-minor-mode
+  :config
+  (yas-global-mode)
+  :custom
+  (yas-prompt-functions '(yas-completing-prompt)))
+
+;;
+;; Projectile
+;;
+;;
 ;; Project Management
+;;
+
 (use-package projectile
   :straight t)
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Helpful
 ;;
-;; -----------------------------------------------------------------------------
 
-;; Helpful
 (use-package helpful
   :straight t
   :bind
@@ -119,19 +235,19 @@
    ("C-h F" . helpful-function)
    ("C-h C" . helpful-command)))
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Dired
 ;;
-;; -----------------------------------------------------------------------------
 
 (use-package dired
   :straight (:type built-in)
   :hook ((dired-mode . hl-line-mode)
          (dired-mode . dired-hide-details-mode)))
 
+;;
 ;; Dired Single
+;;
+
 (use-package dired-single
   :straight t
   :after dired
@@ -139,73 +255,94 @@
               ("<return>" . dired-single-buffer)
               ("<mouse 1>" . 'dired-single-buffer-mouse)))
 
+;;
 ;; All The Icons Dired
+;;
+
 (use-package all-the-icons-dired
+  :after (dired all-the-icons)
   :straight t
   :hook (dired-mode . all-the-icons-dired-mode))
 
+;;
 ;; Dired Hacks
+;;
+
 (use-package dired-hacks-utils
   :straight t
   :after dired)
 
+;;
 ;; Dired Filter
+;;
+
 (use-package dired-filter
   :straight t
   :after dired
   :config
   (define-key dired-mode-map (kbd "C-f") dired-filter-map))
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Flyckeck
 ;;
-;; -----------------------------------------------------------------------------
-
+;;
 ;; Flycheck is a modern on-the-fly syntax checking extension for GNU
 ;; Emacs, intended as replacement for the older Flymake extension
 ;; which is part of GNU Emacs.
+;;
+
 (use-package flycheck
   :straight t
   :init
-  (global-flycheck-mode t)
-  ;; :hook
-  ;; (c++-mode . (lambda ()
-  ;;               (setq flycheck-gcc-language-standard "c++20")
-  ;;               (setq flycheck-clang-language-standard "c++20")))
-  )
+  (global-flycheck-mode t))
+
+;;
+;; flycheck postframe
+;;
 
 (use-package flycheck-posframe
   :straight t
   :after flycheck
   :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
 
-;; -----------------------------------------------------------------------------
 ;;
-;; Company
+;; Prescient
 ;;
-;; -----------------------------------------------------------------------------
-
+;;
 ;; prescient.el is a library which sorts and filters lists of
 ;; candidates, such as appear when you use a package like Ivy or
 ;; Company.
+;;
+
 (use-package prescient
   :straight t
   :config
   (prescient-persist-mode 1))
+;;
+;; Company
+;;
+;;
+;;  Gives us the standard dropdown as-you-type of modern IDEs.
+;;
 
-;; company-mode gives us the standard dropdown as-you-type of modern IDEs.
 (use-package company
   :straight t
   :init
   (add-hook 'after-init-hook 'global-company-mode))
+
+;;
+;; Company-prescient
+;;
 
 (use-package company-prescient
   :straight t
   :after (company prescient)
   :config
   (company-prescient-mode 1))
+
+;;
+;; Company-postframe
+;;
 
 (use-package company-posframe
   :straight t
@@ -215,14 +352,13 @@
   :config
   (company-posframe-mode 1))
 
+;; Adding the dabbrev-code backend becasue company was not auto-completing code
+;; from the current working project or source directory.
 (add-to-list 'company-backends '(company-dabbrev-code))
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Vertico
 ;;
-;; -----------------------------------------------------------------------------
 
 (use-package vertico
   :demand t                             ; Otherwise won't get loaded immediately
@@ -333,12 +469,9 @@
                  cand)))
   )
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Orderless
 ;;
-;; -----------------------------------------------------------------------------
 
 (use-package orderless
   :custom
@@ -416,14 +549,10 @@ parses its input."
       `(orderless-flex . ,(substring pattern 0 -1))))
   )
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Emacs
 ;;
-;; -----------------------------------------------------------------------------
 
-;; A few more useful configurations...
 (use-package emacs
   :straight t
   :init
@@ -451,14 +580,10 @@ parses its input."
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Consult
 ;;
-;; -----------------------------------------------------------------------------
 
-;; Example configuration for Consult
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings (mode-specific-map)
@@ -563,46 +688,64 @@ parses its input."
   ;; By default `consult-project-function' uses `project-root' from project.el.
   ;; Optionally configure a different project root function.
   ;; There are multiple reasonable alternatives to chose from.
-  ;;;; 1. project.el (the default)
+  ;;; 1. project.el (the default)
   ;; (setq consult-project-function #'consult--default-project--function)
-  ;;;; 2. projectile.el (projectile-project-root)
+  ;;; 2. projectile.el (projectile-project-root)
   ;; (autoload 'projectile-project-root "projectile")
   ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-  ;;;; 3. vc.el (vc-root-dir)
+  ;;; 3. vc.el (vc-root-dir)
   ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-  ;;;; 4. locate-dominating-file
+  ;;; 4. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
 )
 
-;; Optionally add the `consult-flycheck' command.
+;;
+;; Consult flycheck
+;;
+
 (use-package consult-flycheck
   :straight t
   :after (consult flyckeck))
+
+;;
+;; Consult company
+;;
 
 (use-package consult-company
   :straight t
   :after (consult company))
 
+;;
+;; Consult projectile
+;;
+
 (use-package consult-projectile
   :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile" :branch "master")
   :after (consult projectile))
 
+;;
+;; Consult lisp
+;;
+;;
 ;; https://github.com/gagbo/consult-lsp
+;;
+
 (use-package consult-lsp
   :after (consult lsp-mode)
   :straight (consult-lsp :host github :type git :repo "gagbo/consult-lsp")
   :commands consult-lsp-symbols)
 
+;;
+;; Consult YASnippet
+;;
+
 (use-package consult-yasnippet
   :straight t
   :after (consult yasnippet))
 
-
-;; -----------------------------------------------------------------------------
 ;;
 ;; Embark
 ;;
-;; -----------------------------------------------------------------------------
 
 (use-package embark
   :straight t
@@ -625,14 +768,23 @@ parses its input."
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-
+;;
+;; Embark consult
+;;
+;;
 ;; Consult users will also want the embark-consult package.
+;;
+
 (use-package embark-consult
   :straight t ; only need to install it, embark loads it after consult if found
   :after (embark consult)
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+;;
+;; Wgrep
+;;
+;;
 ;; Useful for editing grep results:
 ;;
 ;; 1) "C-c f" invoke `consult-ripgrep'
@@ -641,12 +793,13 @@ parses its input."
 ;; 4) Save or cancel
 ;;    a) Save: "C-x C-s" invoke `save-buffer' (or "C-c C-c")
 ;;    b) Cancel: "C-c C-k"
+;;
+
 (use-package wgrep
   :after (embark-consult ripgrep)
   :straight t)
 
 
-
 (provide 'demacs-system)
 
-;;; demacs-system.el ends here.
+;; demacs-system.el ends here.

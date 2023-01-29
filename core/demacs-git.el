@@ -1,15 +1,16 @@
 ;;; demacs-git.el --- Git configuration.
-
+;;
 ;;; Commentary:
+;;
 ;; This file contains git configuration options.
-
-;; The following packages are loaded:
+;;
+;; Packages:
+;;
 ;; - multiple-cursors
 ;; - whitespace-cleanup-mode
 ;; - highlight-numbers
-
+;;
 ;;; Code:
-
 
 ;;
 (use-package magit

@@ -1,11 +1,23 @@
-;;;_demacs-org.el --- Org configuration
-
+;;; demacs-org.el --- Org configuration.
+;;
 ;;; Commentary:
+;;
 ;; In this section, Org mode and related packages are configured
-
+;;
+;;; Packages:
+;;
+;; - org
+;; - org-bullets
+;; - toc-org
+;; - org-pomodoro
+;;
 ;;; Code:
 
+
+;;
 ;; Org mode
+;;
+
 (use-package org
   :straight t
   :mode ("\\.org\\'" . org-mode)
@@ -34,21 +46,33 @@
   (org-mode . toggle-word-wrap)
   (org-mode . toggle-truncate-lines))
 
+;;
 ;; Org bullets
+;;
+
 (use-package org-bullets
   :straight t
   :defer t
   :hook
   (org-mode . (lambda () (org-bullets-mode 1))))
 
-;; Org bullets
+;;
+;; Org TOC
+;;
+
 (use-package toc-org
   :straight t
   :hook
   (org-mode . toc-org-mode))
 
+;;
+;; Org pomodoro
+;;
+
 (use-package org-pomodoro
   :straight t)
 
+;; Provide the package
 (provide 'demacs-org)
+
 ;;; demacs-org.el ends here

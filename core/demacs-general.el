@@ -1,8 +1,10 @@
 ;;; demacs-general.el --- General configuration.
-
+;;
 ;;; Commentary:
+;;
 ;; This file contains general configuration options.
-
+;;
+;;
 ;;; Code:
 
 
@@ -67,6 +69,15 @@
 
 ;; Saves Emacs command history.
 (savehist-mode)
+
+;; Highlight matching braces
+(show-paren-mode 1)
+(setq show-paren-style 'parenthesis)
+
+;; If you enable Delete Selection mode, a minor mode, then inserting text while
+;; the mark is active causes the selected text to be deleted first. This is
+;; normally default behaviour for text editors.
+(delete-selection-mode t)
 
 ;; It’s good that Emacs supports the wide variety of file encodings it does, but UTF-8
 ;; should always, always be the default.
