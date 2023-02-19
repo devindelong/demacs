@@ -11,13 +11,20 @@
 ;; - doom-themes
 ;;
 ;;; Code:
-;;
+
 
 ;;
 ;; Kaolin themes
 ;;
+(require 'treemacs-atom-theme)
 
 (use-package kaolin-themes
+  :straight t)
+
+(use-package hc-zenburn-theme
+  :straight t)
+
+(use-package atom-one-dark-theme
   :straight t)
 
 ;;
@@ -29,16 +36,17 @@
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-  (defvar doom-themes-treemacs-theme "doom-colors")
+  (defvar doom-themes-treemacs-theme "Atom")
 
   (doom-themes-visual-bell-config)
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
 (defun demacs/init-theme ()
-  (load-theme 'doom-opera t))
+  "Set the theme."
+  (load-theme 'doom-one t))
 
 (add-hook 'emacs-startup-hook #'demacs/init-theme)
 

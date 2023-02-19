@@ -100,6 +100,9 @@
 ;; Use visual line mode when compiling.
 (add-hook 'compilation-mode-hook 'visual-line-mode)
 
+;; Treat underscores as part of the word.
+(add-hook 'prog-mode-hook 'superword-mode)
+
 ;;
 ;; Key Bindings
 ;;

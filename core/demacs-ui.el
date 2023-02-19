@@ -169,9 +169,6 @@
 
 (use-package treemacs
   :straight t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
   :config
   (progn
     (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
@@ -244,6 +241,7 @@
        (treemacs-git-mode 'simple)))
 
     (treemacs-hide-gitignored-files-mode nil))
+
   :bind
   (:map global-map
         ("M-0"       . treemacs-select-window)
@@ -252,7 +250,9 @@
         ("C-x t d"   . treemacs-select-directory)
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
+        ("C-x t M-t" . treemacs-find-tag)
+        )
+  )
 
 ;;
 ;; Treemacs projectile
@@ -260,6 +260,7 @@
 
 (use-package treemacs-projectile
   :straight t
+  :diminish
   :after (treemacs projectile))
 
 ;;
@@ -274,42 +275,161 @@
 ;; Run treemacs on startup.
 (add-hook 'emacs-startup-hook 'treemacs)
 
-;;
-;; Centaur Tabs
-;;
+;; (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
-(use-package centaur-tabs
-  :straight t
-  :config
-  (centaur-tabs-mode t)
+;; (use-package centaur-tabs
+;;   :straight t
 
-  :custom
-  (centaur-tabs-set-icons t)
-  (centaur-tabs-show-new-tab-button nil)
-  (centaur-tabs-set-close-button nil)
-  (centaur-tabs-enable-ido-completion nil)
-  (centaur-tabs-style "bar")
-  (centaur-tabs-set-modified-marker t)
-  (centaur-tabs-height 28)
-  (centaur-tabs-gray-out-icons 'buffer)
-  (centaur-tabs-modified-marker "")
-  (uniquify-separator "/")
-  (uniquify-buffer-name-style 'forward)
+;;   :config
+;;   (centaur-tabs-mode t)
 
-  ;; :hook
-  ;; (dashboard-mode . centaur-tabs-local-mode)
-  ;; (term-mode . centaur-tabs-local-mode)
-  ;; (calendar-mode . centaur-tabs-local-mode)
-  ;; (org-agenda-mode . centaur-tabs-local-mode)
-  ;; (helpful-mode . centaur-tabs-local-mode)
+;;   :custom
+;;   (centaur-tabs-set-icons t)
+;;   (centaur-tabs-show-new-tab-button nil)
+;;   (centaur-tabs-set-close-button nil)
+;;   (centaur-tabs-enable-ido-completion nil)
+;;   (centaur-tabs-style "alternate")
+;;   (centaur-tabs-set-modified-marker t)
+;;   (centaur-tabs-height 34)
+;;   (centaur-tabs-gray-out-icons 'buffer)
+;;   (centaur-tabs-modified-marker "")
+;;   (uniquify-separator "/")
+;;   (uniquify-buffer-name-style 'forward)
 
-  :init
-  (setq centaur-tabs-enable-key-bindings t)
+;;   ;; :hook
+;;   ;; (dashboard-mode . centaur-tabs-local-mode)
+;;   ;; (term-mode . centaur-tabs-local-mode)
+;;   ;; (calendar-mode . centaur-tabs-local-mode)
+;;   ;; (org-agenda-mode . centaur-tabs-local-mode)
+;;   ;; (helpful-mode . centaur-tabs-local-mode)
 
-  :bind
-  (("C-{" . #'centaur-tabs-backward)
-   ("C-}" . #'centaur-tabs-forward)
-   ("C-|" . #'centaur-tabs-toggle-groups)))
+;;   :init
+;;   (setq centaur-tabs-enable-key-bindings t)
+
+;;   :bind
+;;   (
+;;     ("C-{" . #'centaur-tabs-backward)
+;;     ("C-}" . #'centaur-tabs-forward)
+;;     ("C-|" . #'centaur-tabs-toggle-groups)
+;;   )
+;; )
+
+
+
+(unless (version< emacs-version "27")
+  (use-package tab-line
+    :straight t
+    :hook (after-init . global-tab-line-mode)
+    :config
+    (defun tab-line-close-tab (&optional e)
+      "Close the selected tab.
+
+If tab is presented in another window, close the tab by using
+`bury-buffer` function.  If tab is unique to all existing
+windows, kill the buffer with `kill-buffer` function.  Lastly, if
+no tabs left in the window, it is deleted with `delete-window`
+function."
+      (interactive "e")
+      (let* ((posnp (event-start e))
+             (window (posn-window posnp))
+             (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+        (with-selected-window window
+          (let ((tab-list (tab-line-tabs-window-buffers))
+                (buffer-list (flatten-list
+                              (seq-reduce (lambda (list window)
+                                            (select-window window t)
+                                            (cons (tab-line-tabs-window-buffers) list))
+                                          (window-list) nil))))
+            (select-window window)
+            (if (> (seq-count (lambda (b) (eq b buffer)) buffer-list) 1)
+                (progn
+                  (if (eq buffer (current-buffer))
+                      (bury-buffer)
+                    (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
+                    (set-window-next-buffers window (delq buffer (window-next-buffers))))
+                  (unless (cdr tab-list)
+                    (ignore-errors (delete-window window))))
+              (and (kill-buffer buffer)
+                   (unless (cdr tab-list)
+                     (ignore-errors (delete-window window)))))))))
+
+    (defcustom tab-line-tab-min-width 10
+      "Minimum width of a tab in characters."
+      :type 'integer
+      :group 'tab-line)
+
+    (defcustom tab-line-tab-max-width 30
+      "Maximum width of a tab in characters."
+      :type 'integer
+      :group 'tab-line)
+
+    (defun aorst/tab-line-name-buffer (buffer &rest _buffers)
+      "Create name for tab with padding and truncation.
+
+If buffer name is shorter than `tab-line-tab-max-width' it gets
+centered with spaces, otherwise it is truncated, to preserve
+equal width for all tabs.  This function also tries to fit as
+many tabs in window as possible, so if there are no room for tabs
+with maximum width, it calculates new width for each tab and
+truncates text if needed.  Minimal width can be set with
+`tab-line-tab-min-width' variable."
+      (with-current-buffer buffer
+        (let* ((window-width (window-width (get-buffer-window)))
+               (tab-amount (length (tab-line-tabs-window-buffers)))
+               (window-max-tab-width (if (>= (* (+ tab-line-tab-max-width 3) tab-amount) window-width)
+                                         (/ window-width tab-amount)
+                                       tab-line-tab-max-width))
+               (tab-width (- (cond ((> window-max-tab-width tab-line-tab-max-width)
+                                    tab-line-tab-max-width)
+                                   ((< window-max-tab-width tab-line-tab-min-width)
+                                    tab-line-tab-min-width)
+                                   (t window-max-tab-width))
+                             3)) ;; compensation for ' x ' button
+               (buffer-name (string-trim (buffer-name)))
+               (name-width (length buffer-name)))
+          (if (>= name-width tab-width)
+              (concat  " " (truncate-string-to-width buffer-name (- tab-width 2)) "…")
+            (let* ((padding (make-string (+ (/ (- tab-width name-width) 2) 1) ?\s))
+                   (buffer-name (concat padding buffer-name)))
+              (concat buffer-name (make-string (- tab-width (length buffer-name)) ?\s)))))))
+
+    (setq tab-line-close-button-show t
+          tab-line-new-button-show nil
+          tab-line-separator ""
+          tab-line-tab-name-function #'aorst/tab-line-name-buffer
+          tab-line-right-button (propertize (if (char-displayable-p ?▶) " ▶ " " > ")
+                                            'keymap tab-line-right-map
+                                            'mouse-face 'tab-line-highlight
+                                            'help-echo "Click to scroll right")
+          tab-line-left-button (propertize (if (char-displayable-p ?◀) " ◀ " " < ")
+                                           'keymap tab-line-left-map
+                                           'mouse-face 'tab-line-highlight
+                                           'help-echo "Click to scroll left")
+          tab-line-close-button (propertize (if (char-displayable-p ?×) " × " " x ")
+                                            'keymap tab-line-tab-close-map
+                                            'mouse-face 'tab-line-close-highlight
+                                            'help-echo "Click to close tab"))
+
+    (let ((bg (if (facep 'solaire-default-face)
+                  (face-attribute 'solaire-default-face :background)
+                (face-attribute 'default :background)))
+          (fg (face-attribute 'default :foreground))
+          (base (face-attribute 'mode-line :background))
+          (box-width (/ (line-pixel-height) 2)))
+      (set-face-attribute 'tab-line nil :background base :foreground fg :height 1.0 :inherit nil :box (list :line-width -1 :color base))
+      (set-face-attribute 'tab-line-tab nil :foreground fg :background bg :weight 'normal :inherit nil :box (list :line-width box-width :color bg))
+      (set-face-attribute 'tab-line-tab-inactive nil :foreground fg :background base :weight 'normal :inherit nil :box (list :line-width box-width :color base))
+      (set-face-attribute 'tab-line-tab-current nil :foreground fg :background bg :weight 'normal :inherit nil :box (list :line-width box-width :color bg)))
+
+    (dolist (mode '(ediff-mode
+                    process-menu-mode
+                    term-mode
+                    vterm-mode))
+      (add-to-list 'tab-line-exclude-modes mode))))
+
+
+(bind-key "C-}" #'tab-line-switch-to-next-tab)
+(bind-key "C-{" #'tab-line-switch-to-prev-tab)
 
 ;; Provide this package.
 (provide 'demacs-ui)
