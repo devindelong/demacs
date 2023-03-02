@@ -14,15 +14,28 @@
 
 
 ;;
+;; Custom Treemacs Atom Themes
+;;
+
+(require 'treemacs-atom-theme)
+
+;;
 ;; Kaolin themes
 ;;
-(require 'treemacs-atom-theme)
 
 (use-package kaolin-themes
   :straight t)
 
+;;
+;; HC Zenburn
+;;
+
 (use-package hc-zenburn-theme
   :straight t)
+
+;;
+;; Atom
+;;
 
 (use-package atom-one-dark-theme
   :straight t)
@@ -38,15 +51,21 @@
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-  (defvar doom-themes-treemacs-theme "Atom")
+  ;; (defvar doom-themes-treemacs-theme "Atom")
+  ;; (defvar doom-themes-treemacs-theme "doom-colors")
+    (defvar doom-themes-treemacs-theme "doom-atom")
 
   (doom-themes-visual-bell-config)
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
+;;
+;; Hooks
+;;
+
 (defun demacs/init-theme ()
   "Set the theme."
-  (load-theme 'doom-one t))
+  (load-theme 'doom-sourcerer t))
 
 (add-hook 'emacs-startup-hook #'demacs/init-theme)
 

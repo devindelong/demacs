@@ -66,7 +66,7 @@
    c-basic-offset demacs/c-mode-tab-width
    ;; Custom tab width.
    tab-width demacs/c-mode-tab-width
-   ;; Ensure that tabs are not inderted.
+   ;; Ensure that tabs are not inserted.
    indent-tabs-mode nil)
   ;; Ensure that substatement indentation brackets do not get indented.
   (c-set-offset 'substatement-open 0))
