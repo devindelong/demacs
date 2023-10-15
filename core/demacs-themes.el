@@ -65,7 +65,7 @@
 
 (defun demacs/init-theme ()
   "Set the theme."
-  (load-theme 'doom-sourcerer t))
+  (load-theme 'doom-opera t))
 
 (add-hook 'emacs-startup-hook #'demacs/init-theme)
 

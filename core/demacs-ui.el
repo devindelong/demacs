@@ -155,11 +155,12 @@
   (size-indication-mode)
   (setq doom-modeline-buffer-file-name-style 'auto
         doom-modeline-height 30
-        doom-modeline-major-mode-color-icon nil
+        doom-modeline-icon t
+        doom-modeline-major-mode-icon t
+        doom-modeline-major-mode-color-icon t
         doom-modeline-lsp t
-        doom-modeline-env-version t)
-  :init
-  (doom-modeline-mode)
+        doom-modeline-env-version t
+        )
   :hook
   (after-init . doom-modeline-mode))
 
@@ -176,7 +177,7 @@
           treemacs-directory-name-transformer      #'identity
           treemacs-display-in-side-window          t
           treemacs-eldoc-display                   'simple
-          treemacs-file-event-delay                5000
+          treemacs-file-event-delay                2000
           treemacs-file-extension-regex            treemacs-last-period-regex-value
           treemacs-file-follow-delay               0.2
           treemacs-file-name-transformer           #'identity
@@ -185,11 +186,11 @@
           treemacs-find-workspace-method           'find-for-file-or-pick-first
           treemacs-git-command-pipe                ""
           treemacs-goto-tag-strategy               'refetch-index
-          ;; treemacs-header-scroll-indicators        '(nil . "^^^^^^")'
-          ;; treemacs-hide-dot-git-directory          t
+          treemacs-header-scroll-indicators        '(nil . "^^^^^^")
+          treemacs-hide-dot-git-directory          t
           treemacs-indentation                     2
-          treemacs-indentation-string              " "
-          treemacs-is-never-other-window           t
+          ;; treemacs-indentation-string              "\n "
+          treemacs-is-never-other-window           nil
           treemacs-max-git-entries                 5000
           treemacs-missing-project-action          'ask
           treemacs-move-forward-on-expand          nil
@@ -205,6 +206,7 @@
           treemacs-recenter-after-project-jump     'always
           treemacs-recenter-after-project-expand   'on-distance
           treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
+          treemacs-project-follow-into-home        nil
           treemacs-show-cursor                     nil
           treemacs-show-hidden-files               t
           treemacs-silent-filewatch                nil
@@ -302,9 +304,9 @@
         centaur-tabs-set-close-button t
         centaur-tabs-enable-ido-completion nil
         ;; Tab styles do not render properly in newer Emacs
-        centaur-tabs-style nil
+        centaur-tabs-style 'rounded
         centaur-tabs-set-modified-marker t
-        ;; centaur-tabs-height 32
+        centaur-tabs-height 32
         centaur-tabs-gray-out-icons 'buffer
         centaur-tabs-modified-marker ""
         centaur-tabs-show-navigation-buttons t
