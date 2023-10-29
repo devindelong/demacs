@@ -101,6 +101,7 @@
   (prog-mode . hl-line-mode)
   (text-mode . hl-line-mode))
 
+
 ;;
 ;; Highlight indent guides
 ;;
@@ -154,14 +155,14 @@
   (size-indication-mode)
   (setq doom-modeline-buffer-file-name-style 'auto
         doom-modeline-height 30
-        doom-modeline-major-mode-color-icon nil
+        doom-modeline-icon t
+        doom-modeline-major-mode-icon t
+        doom-modeline-major-mode-color-icon t
         doom-modeline-lsp t
-        doom-modeline-env-version t)
-  :init
-  (doom-modeline-mode)
+        doom-modeline-env-version t
+        )
   :hook
   (after-init . doom-modeline-mode))
-
 
 ;;
 ;; Treemacs
@@ -169,9 +170,6 @@
 
 (use-package treemacs
   :straight t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
   :config
   (progn
     (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
@@ -179,7 +177,7 @@
           treemacs-directory-name-transformer      #'identity
           treemacs-display-in-side-window          t
           treemacs-eldoc-display                   'simple
-          treemacs-file-event-delay                5000
+          treemacs-file-event-delay                2000
           treemacs-file-extension-regex            treemacs-last-period-regex-value
           treemacs-file-follow-delay               0.2
           treemacs-file-name-transformer           #'identity
@@ -188,11 +186,11 @@
           treemacs-find-workspace-method           'find-for-file-or-pick-first
           treemacs-git-command-pipe                ""
           treemacs-goto-tag-strategy               'refetch-index
-          ;; treemacs-header-scroll-indicators        '(nil . "^^^^^^")'
-          ;; treemacs-hide-dot-git-directory          t
+          treemacs-header-scroll-indicators        '(nil . "^^^^^^")
+          treemacs-hide-dot-git-directory          t
           treemacs-indentation                     2
-          treemacs-indentation-string              " "
-          treemacs-is-never-other-window           t
+          ;; treemacs-indentation-string              "\n "
+          treemacs-is-never-other-window           nil
           treemacs-max-git-entries                 5000
           treemacs-missing-project-action          'ask
           treemacs-move-forward-on-expand          nil
@@ -208,6 +206,7 @@
           treemacs-recenter-after-project-jump     'always
           treemacs-recenter-after-project-expand   'on-distance
           treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
+          treemacs-project-follow-into-home        nil
           treemacs-show-cursor                     nil
           treemacs-show-hidden-files               t
           treemacs-silent-filewatch                nil
@@ -244,6 +243,7 @@
        (treemacs-git-mode 'simple)))
 
     (treemacs-hide-gitignored-files-mode nil))
+
   :bind
   (:map global-map
         ("M-0"       . treemacs-select-window)
@@ -252,7 +252,9 @@
         ("C-x t d"   . treemacs-select-directory)
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
+        ("C-x t M-t" . treemacs-find-tag)
+        )
+  )
 
 ;;
 ;; Treemacs projectile
@@ -260,6 +262,7 @@
 
 (use-package treemacs-projectile
   :straight t
+  :diminish
   :after (treemacs projectile))
 
 ;;
@@ -271,8 +274,22 @@
   :after (treemacs magit)
   :ensure t)
 
+;;
+;; Treemacs dired icons
+;;
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :straight t)
+
+;;
+;; Treemacs Hooks
+;;
+
 ;; Run treemacs on startup.
 (add-hook 'emacs-startup-hook 'treemacs)
+
+;; (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
 ;;
 ;; Centaur Tabs
@@ -280,36 +297,32 @@
 
 (use-package centaur-tabs
   :straight t
+  :after (all-the-icons)
   :config
+  (setq centaur-tabs-set-icons t
+        centaur-tabs-show-new-tab-button t
+        centaur-tabs-set-close-button t
+        centaur-tabs-enable-ido-completion nil
+        ;; Tab styles do not render properly in newer Emacs
+        centaur-tabs-style 'rounded
+        centaur-tabs-set-modified-marker t
+        centaur-tabs-height 32
+        centaur-tabs-gray-out-icons 'buffer
+        centaur-tabs-modified-marker ""
+        centaur-tabs-show-navigation-buttons t
+        centaur-tabs-group-by-projectile-project t)
+
+  (centaur-tabs-headline-match)
   (centaur-tabs-mode t)
 
-  :custom
-  (centaur-tabs-set-icons t)
-  (centaur-tabs-show-new-tab-button nil)
-  (centaur-tabs-set-close-button nil)
-  (centaur-tabs-enable-ido-completion nil)
-  (centaur-tabs-style "bar")
-  (centaur-tabs-set-modified-marker t)
-  (centaur-tabs-height 28)
-  (centaur-tabs-gray-out-icons 'buffer)
-  (centaur-tabs-modified-marker "")
-  (uniquify-separator "/")
-  (uniquify-buffer-name-style 'forward)
-
-  ;; :hook
-  ;; (dashboard-mode . centaur-tabs-local-mode)
-  ;; (term-mode . centaur-tabs-local-mode)
-  ;; (calendar-mode . centaur-tabs-local-mode)
-  ;; (org-agenda-mode . centaur-tabs-local-mode)
-  ;; (helpful-mode . centaur-tabs-local-mode)
-
-  :init
-  (setq centaur-tabs-enable-key-bindings t)
-
   :bind
-  (("C-{" . #'centaur-tabs-backward)
-   ("C-}" . #'centaur-tabs-forward)
-   ("C-|" . #'centaur-tabs-toggle-groups)))
+  (
+    ("C-{" . #'centaur-tabs-backward)
+    ("C-}" . #'centaur-tabs-forward)
+    ("C-|" . #'centaur-tabs-toggle-groups)
+  )
+) ;; centaur-tabs
+
 
 ;; Provide this package.
 (provide 'demacs-ui)

@@ -91,10 +91,7 @@
 
 ;; Go test
 (use-package gotest
-  :straight t
-  :bind (:map go-mode-map
-              ("C-c a t" . #'go-test-current-test)))
-
+  :straight t)
 ;;
 ;; Python
 ;;

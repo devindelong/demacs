@@ -57,6 +57,8 @@
  save-some-buffers-default-predicate 'save-some-buffers-root
  ;; don't keep duplicate entries in kill ring
  kill-do-not-save-duplicates t
+ ;; comment empty lines.
+ comment-empty-lines t
  )
 
  ;; Default to 80 for fill column
