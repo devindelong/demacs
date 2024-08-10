@@ -52,8 +52,8 @@
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
   ;; (defvar doom-themes-treemacs-theme "Atom")
-  ;; (defvar doom-themes-treemacs-theme "doom-colors")
-    (defvar doom-themes-treemacs-theme "doom-atom")
+  (defvar doom-themes-treemacs-theme "doom-colors")
+    ;; (defvar doom-themes-treemacs-theme "doom-atom")
 
   (doom-themes-visual-bell-config)
   (doom-themes-treemacs-config)
@@ -65,7 +65,7 @@
 
 (defun demacs/init-theme ()
   "Set the theme."
-  (load-theme 'doom-sourcerer t))
+  (load-theme 'doom-opera t))
 
 (add-hook 'emacs-startup-hook #'demacs/init-theme)
 

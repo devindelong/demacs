@@ -53,19 +53,39 @@
 
 
 ;;
-;; Prescient soft
+;; Docker
+;;
+
+(use-package docker
+  :straight t
+  :bind ("C-c d" . docker))
+
+;;
+;; Color
 ;;
 
 (use-package color
   :straight t)
 
+;;
+;; Powerline
+;;
+
 (use-package powerline
   :straight t)
+
+;;
+;; Rainbow delimiters
+;;
 
 (use-package rainbow-delimiters
   :straight t
   :hook
   (prog-mode . rainbow-delimiters-mode))
+
+;;
+;; Prescient soft
+;;
 
 (use-package persistent-soft
   :straight t)
@@ -93,7 +113,7 @@
   (compilation-filter . ansi-color-compilation-filter))
 
 ;;
-;; All The Icons
+;; Nerd icons
 ;;
 
 (use-package nerd-icons
@@ -104,6 +124,10 @@
   ;; but you can use any other Nerd Font if you want
   ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
   )
+
+;;
+;; All The Icons
+;;
 
 (use-package all-the-icons
   :straight t
@@ -119,16 +143,15 @@
   (marginalia-mode))
 
 ;;
-;; All the icons completion
+;; Nerd icons completion
 ;;
 
-(use-package all-the-icons-completion
+(use-package nerd-icons-completion
   :straight t
-  :after (marginalia all-the-icons)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :init
-  (all-the-icons-completion-mode))
-
+  :after (marginalia nerd-icons)
+  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+  :config
+  (nerd-icons-completion-mode))
 ;;
 ;; Pretty mode
 ;;
@@ -223,9 +246,6 @@
 ;;
 ;; Projectile
 ;;
-;;
-;; Project Management
-;;
 
 (use-package projectile
   :straight t)
@@ -293,7 +313,7 @@
   (define-key dired-mode-map (kbd "C-f") dired-filter-map))
 
 ;;
-;; Flyckeck
+;; Flycheck
 ;;
 ;;
 ;; Flycheck is a modern on-the-fly syntax checking extension for GNU
@@ -659,9 +679,6 @@
 
 ;;
 ;; Embark consult
-;;
-;;
-;; Consult users will also want the embark-consult package.
 ;;
 
 (use-package embark-consult

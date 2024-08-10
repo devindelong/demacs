@@ -283,6 +283,15 @@
   :straight t)
 
 ;;
+;; Treemacs nerd icons
+;;
+
+(use-package treemacs-nerd-icons
+  :straight t
+  :config
+  (treemacs-load-theme "nerd-icons"))
+
+;;
 ;; Treemacs Hooks
 ;;
 
@@ -299,7 +308,7 @@
   :straight t
   :after (all-the-icons)
   :config
-  (setq centaur-tabs-set-icons t
+  (setq centaur-tabs-set-icons nil
         centaur-tabs-show-new-tab-button t
         centaur-tabs-set-close-button t
         centaur-tabs-enable-ido-completion nil
@@ -309,7 +318,7 @@
         centaur-tabs-height 32
         centaur-tabs-gray-out-icons 'buffer
         centaur-tabs-modified-marker ""
-        centaur-tabs-show-navigation-buttons t
+        centaur-tabs-show-navigation-buttons nil
         centaur-tabs-group-by-projectile-project t)
 
   (centaur-tabs-headline-match)
