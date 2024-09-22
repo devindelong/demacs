@@ -52,146 +52,54 @@
 ;;; Code:
 
 
-;;
-;; Docker
-;;
+;; -----------------------------------------------------------------------------
+;; Tools
+;; -----------------------------------------------------------------------------
 
-(use-package docker
-  :straight t
-  :bind ("C-c d" . docker))
 
+;; Useful for editing grep results:
 ;;
-;; Color
+;; 1) "C-c f" invoke `consult-ripgrep'
+;; 2) "C-s-e" invoke `embark-export' (On OS X map that's Ctrl+Cmd+e)
+;; 3) "e" or "C-c C-p" invoke `wgrep-change-to-wgrep-mode'
+;; 4) Save or cancel
+;;    a) Save: "C-x C-s" invoke `save-buffer' (or "C-c C-c")
+;;    b) Cancel: "C-c C-k"
 ;;
-
-(use-package color
+(use-package wgrep
+  :after (embark-consult ripgrep)
   :straight t)
 
-;;
-;; Powerline
-;;
 
-(use-package powerline
-  :straight t)
-
-;;
-;; Rainbow delimiters
-;;
-
-(use-package rainbow-delimiters
+;; YASnippet is a template system for Emacs. It allows you to type an
+;; abbreviation and automatically expand it into function templates.
+;; Bundled language templates include: C, C++, C#, Perl, Python, Ruby,
+;; SQL, LaTeX, HTML, CSS and more.
+(use-package yasnippet
   :straight t
-  :hook
-  (prog-mode . rainbow-delimiters-mode))
-
-;;
-;; Prescient soft
-;;
-
-(use-package persistent-soft
-  :straight t)
-
-;;
-;; Unicode fonts
-;;
-
-(use-package unicode-fonts
-  :straight t
-  :after persistent-soft
+  :diminish yas-minor-mode
   :config
-  (unicode-fonts-setup))
+  (yas-global-mode)
+  :custom
+  (yas-prompt-functions '(yas-completing-prompt)))
 
-;;
-;; ANSI Color
-;;
 
-(use-package ansi-color
+;; Better help.
+(use-package helpful
   :straight t
-  :config
-  (ansi-color-for-comint-mode-on)
-  (setq ansi-color-for-compilation-mode t)
-  :hook
-  (compilation-filter . ansi-color-compilation-filter))
+  :bind
+  (("C-h k"   . helpful-key)
+   ("C-h f"   . helpful-callable)
+   ("C-h v"   . helpful-variable)
+   ("C-h k"   . helpful-key)
+   ("C-c C-d" . helpful-at-point)
+   ("C-h F"   . helpful-function)
+   ("C-h C"   . helpful-command)))
 
-;;
-;; Nerd icons
-;;
-
-(use-package nerd-icons
-  :straight t
-  ;; :custom
-  ;; The Nerd Font you want to use in GUI
-  ;; "Symbols Nerd Font Mono" is the default and is recommended
-  ;; but you can use any other Nerd Font if you want
-  ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
-  )
-
-;;
-;; All The Icons
-;;
-
-(use-package all-the-icons
-  :straight t
-  :if (display-graphic-p))
-
-;;
-;; Marginalia
-;;
-
-(use-package marginalia
-  :straight t
-  :config
-  (marginalia-mode))
-
-;;
-;; Nerd icons completion
-;;
-
-(use-package nerd-icons-completion
-  :straight t
-  :after (marginalia nerd-icons)
-  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
-  :config
-  (nerd-icons-completion-mode))
-;;
-;; Pretty mode
-;;
-
-(use-package pretty-mode
-  :straight t)
-
-;;
-;; Solaire mode
-;;
-
-(use-package solaire-mode
-  :straight t
-  :config
-  (setq solaire-mode-remap-fringe t)
-  (solaire-global-mode))
-
-;;
-;; Diminish
-;;
-;;
-;; When we diminish a mode, we are saying we want it to continue doing its work
-;; for us, but we no longer want to be reminded of it
-;;
-
-(use-package diminish
-  :straight t
-  :config
-  (diminish 'visual-line-mode))
-
-;;
-;; Ripgrep
-;;
 
 (use-package ripgrep
   :straight t)
 
-;;
-;; Which key
-;;
 
 (use-package which-key
   :straight t
@@ -204,167 +112,250 @@
   (set-face-attribute
     'which-key-local-map-description-face nil :weight 'bold))
 
-;;
-;; Exec path from shell
-;;
 
-;; A GNU Emacs library to ensure environment variables inside Emacs look the
-;; same as in the user's shell. Basically commands on a shell path are
-;; visible in emacs
+;; A GNU Emacs library to ensure environment variables inside Emacs look the same as in
+;; the user's shell. Basically commands on a shell path are visible in emacs
 (use-package exec-path-from-shell
   :straight t
   :init
   (exec-path-from-shell-initialize))
 
-;;
-;; Whitespace cleanup mode
-;;
 
-(use-package whitespace-cleanup-mode
+;; Run Docker commands in Emacs.
+(use-package docker
   :straight t
-  :config
-  (global-whitespace-cleanup-mode 1))
+  :bind ("C-c d" . docker))
 
-;;
-;; YASnippet
-;;
-;;
-;; YASnippet is a template system for Emacs. It allows you to type an
-;; abbreviation and automatically expand it into function templates.
-;; Bundled language templates include: C, C++, C#, Perl, Python, Ruby,
-;; SQL, LaTeX, HTML, CSS and more.
-;;
+;; -----------------------------------------------------------------------------
+;; Miscellaneous
+;; -----------------------------------------------------------------------------
 
-(use-package yasnippet
+
+;; Persist history over Emacs restarts.
+(use-package savehist
   :straight t
-  :diminish yas-minor-mode
-  :config
-  (yas-global-mode)
-  :custom
-  (yas-prompt-functions '(yas-completing-prompt)))
+  :init
+  (savehist-mode))
 
-;;
-;; Projectile
-;;
 
+;; Project management.
 (use-package projectile
   :straight t)
 
-;;
-;; Helpful
-;;
 
-(use-package helpful
+(use-package color
+  :straight t)
+
+
+(use-package ansi-color
   :straight t
-  :bind
-  (("C-h k" . helpful-key)
-   ("C-h f" . helpful-callable)
-   ("C-h v" . helpful-variable)
-   ("C-h k" . helpful-key)
-   ("C-c C-d" . helpful-at-point)
-   ("C-h F" . helpful-function)
-   ("C-h C" . helpful-command)))
+  :config
+  (ansi-color-for-comint-mode-on)
+  (setq ansi-color-for-compilation-mode t)
+  :hook
+  (compilation-filter . ansi-color-compilation-filter))
 
-;;
+
+(use-package persistent-soft
+  :straight t)
+
+
+;; Renders unicode in the buffer.
+(use-package pretty-mode
+  :straight t
+  :hook (text-mode . turn-on-pretty-mode))
+
+
+;; When we diminish a mode, we are saying we want it to continue doing its work for us,
+;; but we no longer want to be reminded of it
+(use-package diminish
+  :straight t
+  :config
+  (diminish 'visual-line-mode))
+
+
+
+;; prescient.el is a library which sorts and filters lists of candidates, such as appear
+;; when you use a package like Ivy or Company.
+(use-package prescient
+  :straight t
+  :config
+  (prescient-persist-mode 1))
+
+
+;; -----------------------------------------------------------------------------
+;; Eglot
+;; -----------------------------------------------------------------------------
+
+
+(use-package eglot
+  :ensure t
+  :hook ((prog-mode . eglot-ensure))
+  :custom
+  (eglot-autoshutdown t)
+  (global-eglot-inlay-hints-mode nil)
+  (eglot-events-buffer-size 0)
+  (eglot-extend-to-xref nil)
+  (eglot-ignored-server-capabilities
+   '(:hoverProvider
+     :inlayHintProvider
+     :documentHighlightProvider
+     :documentFormattingProvider
+     :documentRangeFormattingProvider
+     :documentOnTypeFormattingProvider
+     :colorProvider
+     :foldingRangeProvider))
+  (eglot-stay-out-of '(yasnippet)))
+
+
+;; -----------------------------------------------------------------------------
+;; Fonts
+;; -----------------------------------------------------------------------------
+
+
+(use-package unicode-fonts
+  :straight t
+  :after persistent-soft
+  :config
+  (unicode-fonts-setup))
+
+
+;; -----------------------------------------------------------------------------
+;; Icons
+;; -----------------------------------------------------------------------------
+
+
+(use-package nerd-icons
+  :straight t
+  ;; :custom The Nerd Font you want to use in GUI "Symbols Nerd Font Mono" is the default
+  ;; and is recommended but you can use any other Nerd Font if you want
+  ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+  )
+
+
+;; Probably not needed?
+(use-package all-the-icons
+  :straight t)
+
+
+;; -----------------------------------------------------------------------------
+;; Marginalia
+;; -----------------------------------------------------------------------------
+
+;; Adds marginalia to the minibuffer completions. Marginalia are marks or annotations
+;; placed at the margin of the page of a book or in this case helpful colorful annotations
+;; placed at the margin of the minibuffer for your completion candidates.
+(use-package marginalia
+  :straight t
+  :config
+  (marginalia-mode))
+
+
+;; Nerd icons for marginalia.
+(use-package nerd-icons-completion
+  :straight t
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+
+;; -----------------------------------------------------------------------------
 ;; Dired
-;;
+;; -----------------------------------------------------------------------------
 
+
+;; File browser.
 (use-package dired
   :straight (:type built-in)
   :hook ((dired-mode . hl-line-mode)
          (dired-mode . dired-hide-details-mode)))
 
-;;
-;; Dired Single
-;;
 
-(use-package dired-single
+;; Adds collapsible sub-menus.
+(use-package dired-subtree
+        :straight t
+        :after dired
+        :bind (:map dired-mode-map
+                    ("i" . dired-subtree-insert)
+                    (";" . dired-subtree-remove)
+                    ("<tab>" . dired-subtree-toggle)
+                    ("<backtab>" . dired-subtree-cycle)))
+
+
+;; Collapses nested folders with single elements.
+(use-package dired-collapse
+  :straight t
+  :after dired
+  :config (dired-collapse-mode))
+
+
+(use-package dired-filter
+  :straight t
+  :after dired)
+
+
+;; Narrow down the files with search.
+(use-package dired-narrow
   :straight t
   :after dired
   :bind (:map dired-mode-map
-              ("<return>" . dired-single-buffer)
-              ("<mouse 1>" . 'dired-single-buffer-mouse)))
+              ("C-s" . dired-narrow)))
 
-;;
-;; All The Icons Dired
-;;
 
-(use-package all-the-icons-dired
-  :after (dired all-the-icons)
+(use-package dired-ranger
   :straight t
-  :hook (dired-mode . all-the-icons-dired-mode))
+  :after dired)
 
-;;
-;; Dired Hacks
-;;
 
 (use-package dired-hacks-utils
   :straight t
   :after dired)
 
-;;
-;; Dired Filter
-;;
 
-(use-package dired-filter
+(use-package nerd-icons-dired
   :straight t
-  :after dired
-  :config
-  (define-key dired-mode-map (kbd "C-f") dired-filter-map))
+  :after (dired nerd-icons)
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
-;;
+
+;; -----------------------------------------------------------------------------
 ;; Flycheck
-;;
-;;
-;; Flycheck is a modern on-the-fly syntax checking extension for GNU
-;; Emacs, intended as replacement for the older Flymake extension
-;; which is part of GNU Emacs.
-;;
+;; -----------------------------------------------------------------------------
 
+
+;; Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs, intended as
+;; replacement for the older Flymake extension which is part of GNU Emacs.
 (use-package flycheck
-  :straight t)
-  ;; :init
-  ;; (global-flycheck-mode t))
+  :straight t
+  :hook (after-init . global-flycheck-mode))
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
-
-;;
-;; flycheck postframe
-;;
 
 (use-package flycheck-posframe
   :straight t
   :after flycheck
   :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
 
-;;
-;; Prescient
-;;
-;;
-;; prescient.el is a library which sorts and filters lists of
-;; candidates, such as appear when you use a package like Ivy or
-;; Company.
-;;
 
-(use-package prescient
+(use-package flycheck-eglot
   :straight t
+  :after (flycheck eglot)
   :config
-  (prescient-persist-mode 1))
-;;
-;; Company
-;;
-;;
-;;  Gives us the standard dropdown as-you-type of modern IDEs.
-;;
+  (global-flycheck-eglot-mode 1))
 
+
+;; -----------------------------------------------------------------------------
+;; Company
+;; -----------------------------------------------------------------------------
+
+
+;; Completion. Gives us the standard dropdown as-you-type of modern IDEs.
 (use-package company
   :straight t
   :init
   (add-hook 'after-init-hook 'global-company-mode))
 
-;;
-;; Company-prescient
-;;
 
 (use-package company-prescient
   :straight t
@@ -372,9 +363,6 @@
   :config
   (company-prescient-mode 1))
 
-;;
-;; Company-postframe
-;;
 
 (use-package company-posframe
   :straight t
@@ -384,60 +372,49 @@
   :config
   (company-posframe-mode 1))
 
+
+;; Python completion.
+(use-package company-jedi
+  :straight t
+  :after company)
+(add-to-list 'company-backends 'company-jedi)
+
+
 ;; Adding the dabbrev-code backend becasue company was not auto-completing code
 ;; from the current working project or source directory.
 (add-to-list 'company-backends '(company-dabbrev-code))
 
 
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :straight t
-  :init
-  (savehist-mode))
-
-;;
+;; -----------------------------------------------------------------------------
 ;; Vertico
-;;
+;; -----------------------------------------------------------------------------
 
-;; Enable vertico
+
+;; Vertical completions.
 (use-package vertico
   :straight t
   :init
   (vertico-mode)
-
   :custom
-  (vertico-count 13)
+  (vertico-count 20)
   (vertico-resize t)
-  (vertico-cycle nil)
-
+  (vertico-cycle t)
   :general
   (:keymaps '(normal insert visual motion)
             "M-." #'vertico-repeat
             )
   (:keymaps 'vertico-map
-            "<tab>" #'vertico-insert ; Set manually otherwise setting `vertico-quick-insert' overrides this
+            "<tab>"    #'vertico-insert
             "<escape>" #'minibuffer-keyboard-quit
-            "?" #'minibuffer-completion-help
-            "C-M-n" #'vertico-next-group
-            "C-M-p" #'vertico-previous-group
-            )
+            "?"        #'minibuffer-completion-help
+            "C-M-n"    #'vertico-next-group
+            "C-M-p"    #'vertico-previous-group))
 
-  ;; Different scroll margin
-  ;; (setq vertico-scroll-margin 0)
 
-  ;; Show more candidates
-  ;; (setq vertico-count 20)
-
-  ;; Grow and shrink the Vertico minibuffer
-  ;; (setq vertico-resize t)
-
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;; (setq vertico-cycle t)
-  )
-
-;;
+;; -----------------------------------------------------------------------------
 ;; Orderless
-;;
+;; -----------------------------------------------------------------------------
+
 
 (use-package orderless
   :straight t
@@ -458,9 +435,11 @@
      ))
   )
 
-;;
+
+;; -----------------------------------------------------------------------------
 ;; Emacs
-;;
+;; -----------------------------------------------------------------------------
+
 
 (use-package emacs
   :straight t
@@ -489,9 +468,11 @@
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
-;;
+
+;; -----------------------------------------------------------------------------
 ;; Consult
-;;
+;; -----------------------------------------------------------------------------
+
 
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -608,60 +589,38 @@
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
 )
 
-;;
-;; Consult flycheck
-;;
 
 (use-package consult-flycheck
   :straight t
   :after (consult flyckeck))
 
-;;
-;; Consult company
-;;
 
 (use-package consult-company
   :straight t
   :after (consult company))
 
-;;
-;; Consult projectile
-;;
 
 (use-package consult-projectile
   :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile" :branch "master")
   :after (consult projectile))
 
-;;
-;; Consult lisp
-;;
-;;
-;; https://github.com/gagbo/consult-lsp
-;;
-
-(use-package consult-lsp
-  :after (consult lsp-mode)
-  :straight (consult-lsp :host github :type git :repo "gagbo/consult-lsp")
-  :commands consult-lsp-symbols)
-
-;;
-;; Consult YASnippet
-;;
 
 (use-package consult-yasnippet
   :straight t
   :after (consult yasnippet))
 
-;;
+
+;; -----------------------------------------------------------------------------
 ;; Embark
-;;
+;; -----------------------------------------------------------------------------
+
 
 (use-package embark
   :straight t
 
   :bind
-  (("C-."   . embark-act)         ;; pick some comfortable binding
-   ("C-;"   . embark-dwim)        ;; good alternative: M-.
+  (("C-."   . embark-act)       ;; pick some comfortable binding
+   ("C-;"   . embark-dwim)      ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init
@@ -677,9 +636,6 @@
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-;;
-;; Embark consult
-;;
 
 (use-package embark-consult
   :straight t ; only need to install it, embark loads it after consult if found
@@ -687,25 +643,6 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-;;
-;; Wgrep
-;;
-;;
-;; Useful for editing grep results:
-;;
-;; 1) "C-c f" invoke `consult-ripgrep'
-;; 2) "C-s-e" invoke `embark-export' (On OS X map that's Ctrl+Cmd+e)
-;; 3) "e" or "C-c C-p" invoke `wgrep-change-to-wgrep-mode'
-;; 4) Save or cancel
-;;    a) Save: "C-x C-s" invoke `save-buffer' (or "C-c C-c")
-;;    b) Cancel: "C-c C-k"
-;;
-
-(use-package wgrep
-  :after (embark-consult ripgrep)
-  :straight t)
-
 
 (provide 'demacs-system)
-
-;; demacs-system.el ends here.
+;;; demacs-system.el ends here.

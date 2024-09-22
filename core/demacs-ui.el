@@ -21,9 +21,7 @@
 ;;
 ;;; Code:
 
-;;
-;; Window Managenent
-;;
+
 
 (defun demacs/split-window-horizontally ()
   "Split a window horizontally and balance them."
@@ -32,6 +30,7 @@
   (balance-windows)
   (other-window 1))
 
+
 (defun demacs/split-window-vertically ()
   "Split a window vertically and balance them."
   (interactive)
@@ -39,23 +38,33 @@
   (balance-windows)
   (other-window 1))
 
+
 (defun demacs/close-window ()
   (interactive)
   (delete-window)
   (balance-windows))
 
-;; Key bindings.
-(bind-key "C-x 0" #'demacs/close-window)
-(bind-key "C-x 2" #'demacs/split-window-horizontally)
-(bind-key "C-x 3" #'demacs/split-window-vertically)
 
-;;
-;; Bar Cursor
-;;
+;; Pretty delimiter pairs.
+(use-package rainbow-delimiters
+  :straight t
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+
+
+;; Solaire-mode is an aesthetic plugin designed to visually distinguish "real" buffers
+;; (i.e. file-visiting code buffers where you do most of your work) from "unreal" buffers
+;; (like popups, sidebars, log buffers, terminals, etc) by giving the latter a slightly
+;; different -- often darker -- background
+(use-package solaire-mode
+  :straight t
+  :config
+  (setq solaire-mode-remap-fringe t)
+  (solaire-global-mode))
+
+
 ;; Emacs Lisp package that changes the Emacs cursor from a block into a bar. In
 ;; overwrite-mode, the cursor will change into a block.
-;;
-
 (use-package bar-cursor
   :straight t
   :after diminish
@@ -63,38 +72,24 @@
   :config
   (bar-cursor-mode 1))
 
-;;
-;; Multiple cursors
-;;
-;; Support for multiple cursor selection and editing.
-;;
 
+;; Support for multiple cursor selection and editing.
 (use-package multiple-cursors
   :straight t
   :bind (("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-SPC" . mc/mark-all-like-this)))
 
-;;
-;; Highlight numbers
-;;
-;; Custom syntax highlighting for numbers.
-;;
 
+;; Custom syntax highlighting for numbers.
 (use-package highlight-numbers
   :straight t
   :diminish
-  :config
-  (set-face-attribute 'highlight-numbers-number nil :weight 'normal)
   :hook
   (prog-mode . highlight-numbers-mode))
 
-;;
-;; HL line
-;;
-;; Highlight the current line.
-;;
 
+;; Highlight the current line.
 (use-package hl-line
   :straight t
   :hook
@@ -102,10 +97,7 @@
   (text-mode . hl-line-mode))
 
 
-;;
-;; Highlight indent guides
-;;
-
+;; Highlight indent guides.
 (use-package highlight-indent-guides
   :straight t
   :config
@@ -144,10 +136,8 @@
   ;; Only display indentation guides when in a programming mode.
   (prog-mode . highlight-indent-guides-mode))
 
-;;
-;; Doom modeline
-;;
 
+;; Doom modeline
 (use-package doom-modeline
   :straight t
   :config
@@ -164,9 +154,11 @@
   :hook
   (after-init . doom-modeline-mode))
 
-;;
+
+;; -----------------------------------------------------------------------------
 ;; Treemacs
-;;
+;; -----------------------------------------------------------------------------
+
 
 (use-package treemacs
   :straight t
@@ -189,7 +181,7 @@
           treemacs-header-scroll-indicators        '(nil . "^^^^^^")
           treemacs-hide-dot-git-directory          t
           treemacs-indentation                     2
-          ;; treemacs-indentation-string              "\n "
+          treemacs-indentation-string              " "
           treemacs-is-never-other-window           nil
           treemacs-max-git-entries                 5000
           treemacs-missing-project-action          'ask
@@ -252,67 +244,46 @@
         ("C-x t d"   . treemacs-select-directory)
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)
-        )
-  )
+        ("C-x t M-t" . treemacs-find-tag))
 
-;;
-;; Treemacs projectile
-;;
+  :hook (emacs-startup . treemacs))
 
+
+;; Integration with projectile.
 (use-package treemacs-projectile
   :straight t
   :diminish
   :after (treemacs projectile))
 
-;;
-;; Treemacs magit
-;;
 
+;; Integration with magit.
 (use-package treemacs-magit
   :straight t
   :after (treemacs magit)
   :ensure t)
 
-;;
-;; Treemacs dired icons
-;;
 
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :straight t)
-
-;;
-;; Treemacs nerd icons
-;;
-
+;; Nerdicons.
 (use-package treemacs-nerd-icons
   :straight t
+  :after (treemacs nerd-icons)
   :config
   (treemacs-load-theme "nerd-icons"))
 
-;;
-;; Treemacs Hooks
-;;
 
-;; Run treemacs on startup.
-(add-hook 'emacs-startup-hook 'treemacs)
+;; -----------------------------------------------------------------------------
+;; Centaur tabs
+;; -----------------------------------------------------------------------------
 
-;; (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-
-;;
-;; Centaur Tabs
-;;
 
 (use-package centaur-tabs
   :straight t
-  :after (all-the-icons)
+  :after (nerd-icons)
   :config
   (setq centaur-tabs-set-icons nil
         centaur-tabs-show-new-tab-button t
         centaur-tabs-set-close-button t
         centaur-tabs-enable-ido-completion nil
-        ;; Tab styles do not render properly in newer Emacs
         centaur-tabs-style 'rounded
         centaur-tabs-set-modified-marker t
         centaur-tabs-height 32
@@ -325,12 +296,28 @@
   (centaur-tabs-mode t)
 
   :bind
-  (
-    ("C-{" . #'centaur-tabs-backward)
-    ("C-}" . #'centaur-tabs-forward)
-    ("C-|" . #'centaur-tabs-toggle-groups)
-  )
-) ;; centaur-tabs
+  (("C-{" . #'centaur-tabs-backward)
+   ("C-}" . #'centaur-tabs-forward)
+   ("C-|" . #'centaur-tabs-toggle-groups)))
+
+
+;; -----------------------------------------------------------------------------
+;; Key bindings.
+;; -----------------------------------------------------------------------------
+
+
+(bind-key "C-x 0" #'demacs/close-window)
+(bind-key "C-x 2" #'demacs/split-window-vertically)
+(bind-key "C-x 3" #'demacs/split-window-horizontally)
+
+
+;; -----------------------------------------------------------------------------
+;; Hooks
+;; -----------------------------------------------------------------------------
+
+
+;; Column indicator line.
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
 
 ;; Provide this package.

@@ -11,9 +11,26 @@
 (defvar demacs/c-mode-tab-width 2
   "Default tab width for C, C++, Java, Objective-C.")
 
-;;
+
+
+(use-package clang-format
+  :straight t)
+
+
+;; (use-package clang-format+
+;;   :straight t
+;;   :after clang-format)
+
+
+(use-package whitespace-cleanup-mode
+  :straight t
+  :config
+  (global-whitespace-cleanup-mode 1))
+
+
+;; -----------------------------------------------------------------------------
 ;; Functions
-;;
+;; -----------------------------------------------------------------------------
 
 (defun demacs/untabify-except-makefiles ()
   "Replace tabs with spaces except in makefiles."
@@ -43,9 +60,9 @@
   "Toggle commenting/uncommenting a region or line."
   (demacs/comment-or-uncomment-region-or-line))
 
-;;
+;; -----------------------------------------------------------------------------
 ;; Programming mode hooks
-;;
+;; -----------------------------------------------------------------------------
 
 (defun demacs/prog-mode-hook ()
   "Customization for all programming modes."
@@ -58,16 +75,15 @@
 
 
 (defun demacs/c-mode-common-hook ()
-  "Customizations for of 'c-mode', 'c++-mode', 'objc-mode', 'java-mode'."
-  (setq
-   ;; The "style"
+  "Customizations for of \='c-mode', \='c++-mode', \='objc-mode', \='java-mode'."
+  (setq-default
    c-default-style "ellemtel"
-   ;; Something.
-   c-basic-offset demacs/c-mode-tab-width
-   ;; Custom tab width.
+   c-basic-offset demacs/c-mode-tab-width)
+
+  (setq
    tab-width demacs/c-mode-tab-width
-   ;; Ensure that tabs are not inserted.
-   indent-tabs-mode nil)
+   indent-tabs-mode nil)    ;; Ensure that tabs are not inserted.
+
   ;; Ensure that substatement indentation brackets do not get indented.
   (c-set-offset 'substatement-open 0))
 
@@ -76,9 +92,9 @@
   "Customization for makegile mode."
   (setq indent-tabs-mode t))
 
-;;
+;; -----------------------------------------------------------------------------
 ;; Hooks
-;;
+;; -----------------------------------------------------------------------------
 
 (add-hook 'prog-mode-hook #'demacs/prog-mode-hook)
 (add-hook 'c-mode-common-hook #'demacs/c-mode-common-hook)
@@ -103,9 +119,9 @@
 ;; Treat underscores as part of the word.
 (add-hook 'prog-mode-hook 'superword-mode)
 
-;;
+;; -----------------------------------------------------------------------------
 ;; Key Bindings
-;;
+;; -----------------------------------------------------------------------------
 
 ;; Will have to figure this out.
 (bind-key "C-/"   #'demacs/comment-or-uncomment-region-or-line)

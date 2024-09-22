@@ -13,36 +13,17 @@
 ;;; Code:
 
 
-;;
-;; Custom Treemacs Atom Themes
-;;
-
-(require 'treemacs-atom-theme)
-
-;;
-;; Kaolin themes
-;;
-
 (use-package kaolin-themes
   :straight t)
 
-;;
-;; HC Zenburn
-;;
 
 (use-package hc-zenburn-theme
   :straight t)
 
-;;
-;; Atom
-;;
 
 (use-package atom-one-dark-theme
   :straight t)
 
-;;
-;; Doom themes
-;;
 
 (use-package doom-themes
   :straight t
@@ -57,17 +38,10 @@
 
   (doom-themes-visual-bell-config)
   (doom-themes-treemacs-config)
-  (doom-themes-org-config))
+  (doom-themes-org-config)
 
-;;
-;; Hooks
-;;
-
-(defun demacs/init-theme ()
-  "Set the theme."
-  (load-theme 'doom-opera t))
-
-(add-hook 'emacs-startup-hook #'demacs/init-theme)
+:hook
+(emacs-startup . (lambda () (load-theme 'doom-Iosvkem t))))
 
 (provide 'demacs-themes)
 

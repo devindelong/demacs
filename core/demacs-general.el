@@ -7,6 +7,8 @@
 ;;
 ;;; Code:
 
+(use-package general
+  :straight t)
 
 (setq
  ;; No need to see GNU agitprop.
@@ -26,7 +28,7 @@
  ;; Let C-k delete the whole line.
  kill-whole-line t
  ;; search should be case-sensitive by default
- case-fold-search nil
+ case-fold-search t
  ;; accept 'y' or 'n' instead of yes/no
  ;; the documentation advises against setting this variable
  ;; the documentation can get bent imo
@@ -39,8 +41,6 @@
  load-prefer-newer t
  ;; when I say to quit, I mean quit
  confirm-kill-processes nil
- ;; unicode ellipses are better
- truncate-string-ellipsis "…"
  ;; I want to close these fast, so switch to it so I can just hit 'q'
  help-window-select t
  ;; this certainly can't hurt anything
@@ -62,7 +62,7 @@
  )
 
  ;; Default to 80 for fill column
-(setq-default fill-column 80)
+(setq-default fill-column 90)
 
 ;; Prevent backup files from littering the filesystem.
 (setq make-backup-files nil
@@ -96,27 +96,18 @@
     (menu-bar-mode 1))    ;; We want the menu bar with MacOS at least.
   (menu-bar-mode -1))
 
-;; Smooth scrolling
-(setq scroll-margin 1
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1)
-
 ;; Forces Emacs to truncate lines that are too long rather than wrapping them
 ;; Consider doing this only for window-system?
 (setq mouse-wheel-tilt-scroll t
       mouse-wheel-flip-direction t)
-(setq-default truncate-lines t)
 
-;; Set default mode
-(setq-default major-mode 'text-mode)
+(setq-default truncate-lines t
+              major-mode 'text-mode)
 
-(use-package general
-  :straight t)
 
 (add-hook 'text-mode-hook 'flyspell-mode)
 
-;; Open Emacs on fullscreen
+;; Open Emacs on full screen.
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 

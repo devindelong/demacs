@@ -14,7 +14,6 @@
 ;; - rust-mode
 ;; - rustic
 ;; - go-mode
-;; - go-snippets
 ;; - gotest
 ;; - blacken
 ;; - cc-mode
@@ -26,27 +25,17 @@
 ;;; Code:
 
 
-;;
-;; Csv
-;;
-
 (use-package csv-mode
   :straight t
   :mode
   ("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 
-;;
-;; CUDA Mode
-;;
 
 (use-package cuda-mode
   :straight t
   :mode
   ("\\.cu$" . cuda-mode))
 
-;;
-;; CMake
-;;
 
 (use-package cmake-mode
   :straight t
@@ -54,18 +43,14 @@
   ("\\.cmake$" . cmake-mode)
   ("CMakeLists.txt$" . cmake-mode))
 
-;;
-;; Rust
-;;
 
-;; Rust mode
 (use-package rust-mode
   :straight t
   :custom
   (rust-format-on-save t)
   (lsp-rust-server 'rust-analyzer))
 
-;; Rustic
+
 (use-package rustic
   :straight t
   :bind (:map rustic-mode-map
@@ -75,50 +60,31 @@
   (rustic-lsp-client 'eglot)
   (rustic-format-on-save t))
 
-;;
-;; Go
-;;
 
-;; Go mode
 (use-package go-mode
   :straight t
   :hook
   (before-save . gofmt-before-save))
 
-;; Go snippets
-(use-package go-snippets
-  :straight t)
 
-;; Go test
 (use-package gotest
   :straight t)
-;;
-;; Python
-;;
 
-;; Blacken
+
 (use-package blacken
   :straight t
   :hook
   (python-mode . blacken-mode))
 
-;;
-;; C/C++
-;;
 
-;; CC mode
 (use-package cc-mode
   :straight t)
 
-;; Modern Cpp fiont lock
+
 (use-package modern-cpp-font-lock
   :straight t)
 
-;;
-;; Markdown
-;;
 
-;; Markdown mode
 (use-package markdown-mode
   :straight t
   :commands gfm-mode markdown-mode
@@ -127,17 +93,10 @@
   ("\\.md\\'" . markdown-mode)
   ("\\.markdown\\'" . markdown-mode))
 
-;;
-;; Swift
-;;
 
-;; Swift mode
 (use-package swift-mode
   :straight t)
 
-;;
-;; Provide the package.
-;;
 
 (provide 'demacs-languages)
 
