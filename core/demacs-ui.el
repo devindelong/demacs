@@ -317,7 +317,7 @@
 
 
 ;; Column indicator line.
-(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+;; (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
 
 ;; Provide this package.

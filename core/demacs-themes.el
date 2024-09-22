@@ -41,7 +41,7 @@
   (doom-themes-org-config)
 
 :hook
-(emacs-startup . (lambda () (load-theme 'doom-Iosvkem t))))
+(emacs-startup . (lambda () (load-theme 'doom-one t))))
 
 (provide 'demacs-themes)
 

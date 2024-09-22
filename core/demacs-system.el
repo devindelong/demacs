@@ -601,7 +601,7 @@
 
 
 (use-package consult-projectile
-  :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile" :branch "master")
+  :straight t
   :after (consult projectile))
 
 
