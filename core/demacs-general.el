@@ -73,8 +73,8 @@
 (savehist-mode)
 
 ;; Highlight matching braces
-(show-paren-mode 1)
-(setq show-paren-style 'parenthesis)
+;; (show-paren-mode 1)
+;; (setq show-paren-style 'parenthesis)
 
 ;; If you enable Delete Selection mode, a minor mode, then inserting text while
 ;; the mark is active causes the selected text to be deleted first. This is
@@ -95,6 +95,14 @@
     (tooltip-mode -1)     ;; Annoying.
     (menu-bar-mode 1))    ;; We want the menu bar with MacOS at least.
   (menu-bar-mode -1))
+
+;; Change key bindings on Mac OS.
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta)    ;; Set Command (⌘) as Meta
+  (setq mac-option-modifier 'super)    ;; Set Option (⌥) as Super
+  (setq mac-control-modifier 'control) ;; Optional: keep Control and Function keys as they are
+  (setq mac-function-modifier 'none))
+
 
 ;; Forces Emacs to truncate lines that are too long rather than wrapping them
 ;; Consider doing this only for window-system?

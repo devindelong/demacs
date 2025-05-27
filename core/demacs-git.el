@@ -24,10 +24,10 @@
   (add-to-list 'magit-no-confirm 'stage-all-changes))
 
 
-(use-package git-commit
-  :straight t
-  :config
-  (global-git-commit-mode 1))
+;; (use-package git-commit
+;;   :straight t
+;;   :config
+;;   (global-git-commit-mode 1))
 
 
 ;; Integration with Git-hub.

@@ -144,7 +144,7 @@
   (column-number-mode)
   (size-indication-mode)
   (setq doom-modeline-buffer-file-name-style 'auto
-        doom-modeline-height 30
+        doom-modeline-height 38
         doom-modeline-icon t
         doom-modeline-major-mode-icon t
         doom-modeline-major-mode-color-icon t
@@ -278,15 +278,14 @@
 
 (use-package centaur-tabs
   :straight t
-  :after (nerd-icons)
   :config
-  (setq centaur-tabs-set-icons nil
+  (setq centaur-tabs-set-icons t
         centaur-tabs-show-new-tab-button t
         centaur-tabs-set-close-button t
         centaur-tabs-enable-ido-completion nil
         centaur-tabs-style 'rounded
         centaur-tabs-set-modified-marker t
-        centaur-tabs-height 32
+        centaur-tabs-height 38
         centaur-tabs-gray-out-icons 'buffer
         centaur-tabs-modified-marker ""
         centaur-tabs-show-navigation-buttons nil

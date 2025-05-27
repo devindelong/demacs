@@ -11,22 +11,38 @@
 (defvar demacs/c-mode-tab-width 2
   "Default tab width for C, C++, Java, Objective-C.")
 
-
+;; -----------------------------------------------------------------------------
+;; Clang format
+;; -----------------------------------------------------------------------------
 
 (use-package clang-format
-  :straight t)
+  :straight t
+  :commands (clang-format-buffer clang-format-region)
+  :bind (("C-c f" . clang-format-buffer)
+         ("C-c r" . clang-format-region)))
 
+(use-package clang-format+
+  :straight t
+  :hook ((c-mode c++-mode java-mode objc-mode protobuf-mode) . clang-format+-mode)
+  :config
+  ;; Enable format-on-save using clang-format+
+  (setq clang-format+-format-on-save t)
 
-;; (use-package clang-format+
-;;   :straight t
-;;   :after clang-format)
+  ;; Optional: Only format changed lines (git diff-based)
+  ;; (setq clang-format+-always-enable-format-on-save t)
 
+  ;; Optional: Keybindings to trigger manually
+  (global-set-key (kbd "C-c C-f") #'clang-format+-buffer)
+  (global-set-key (kbd "C-c C-r") #'clang-format+-region))
+
+;; -----------------------------------------------------------------------------
+;; Whitespace handling
+;; -----------------------------------------------------------------------------
 
 (use-package whitespace-cleanup-mode
   :straight t
   :config
   (global-whitespace-cleanup-mode 1))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Functions

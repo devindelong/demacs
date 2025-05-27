@@ -56,6 +56,10 @@
 ;; Tools
 ;; -----------------------------------------------------------------------------
 
+;; Doxygen formatting.
+;; (use-package doxygen-mode
+;;   :straight t
+;;   :hook ((c++-mode c-mode) . doxygen-mode))
 
 ;; Useful for editing grep results:
 ;;
@@ -187,7 +191,6 @@
 ;; Eglot
 ;; -----------------------------------------------------------------------------
 
-
 (use-package eglot
   :ensure t
   :hook ((prog-mode . eglot-ensure))
@@ -207,6 +210,9 @@
      :foldingRangeProvider))
   (eglot-stay-out-of '(yasnippet)))
 
+;; (with-eval-after-load 'eglot
+;;   (add-to-list 'eglot-server-programs
+;;                '((c-mode c++-mode objc-mode) . ("/opt/homebrew/opt/llvm/bin/clangd"))))
 
 ;; -----------------------------------------------------------------------------
 ;; Fonts

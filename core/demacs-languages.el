@@ -25,6 +25,20 @@
 ;;; Code:
 
 
+(use-package yaml-mode
+  :straight t
+  :mode (("\\.yaml\\'" . yaml-mode)
+         ("\\.yml\\'" . yaml-mode)
+         ("\\.clangd\\'" . yaml-mode)
+         ("\\.clang-format\\'" . yaml-mode)
+         ("\\.circleci/config\\.yml\\'" . yaml-mode)))
+
+(use-package protobuf-mode
+  :straight t)
+
+(use-package dockerfile-mode
+  :straight t)
+
 (use-package csv-mode
   :straight t
   :mode

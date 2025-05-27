@@ -33,7 +33,7 @@
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
   ;; (defvar doom-themes-treemacs-theme "Atom")
-  (defvar doom-themes-treemacs-theme "doom-colors")
+  (defvar doom-themes-treemacs-theme "doom-atom")
     ;; (defvar doom-themes-treemacs-theme "doom-atom")
 
   (doom-themes-visual-bell-config)
@@ -41,7 +41,7 @@
   (doom-themes-org-config)
 
 :hook
-(emacs-startup . (lambda () (load-theme 'doom-one t))))
+(emacs-startup . (lambda () (load-theme 'doom-opera t))))
 
 (provide 'demacs-themes)
 
