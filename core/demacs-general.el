@@ -1,4 +1,4 @@
-;;; demacs-general.el --- General configuration.
+;;; demacs-general.el --- General configuration. -*- lexical-binding: t; -*-
 ;;
 ;;; Commentary:
 ;;
@@ -60,6 +60,9 @@
  ;; comment empty lines.
  comment-empty-lines t
  )
+
+;; cursor height won’t vary
+(setq-default cursor-type 'bar)
 
  ;; Default to 80 for fill column
 (setq-default fill-column 90)

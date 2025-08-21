@@ -96,6 +96,9 @@
   (prog-mode . hl-line-mode)
   (text-mode . hl-line-mode))
 
+(use-package hide-mode-line
+  :straight t
+  :hook (treemacs-mode . hide-mode-line-mode))
 
 ;; Highlight indent guides.
 (use-package highlight-indent-guides

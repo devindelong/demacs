@@ -17,7 +17,7 @@
 
 ;; https://www.reddit.com/r/emacs/comments/mtb05k/emacs_init_time_decreased_65_after_i_realized_the/
 (defvar straight-check-for-modifications '(check-on-save find-when-checking))
-(setq gc-cons-threshold (* 100 1024 1024))
+;; (setq gc-cons-threshold (* 100 1024 1024))
 
 ;; This preamble is part of straight-use-package My understanding, in
 ;; reading straight documentation is that it has better load
@@ -38,6 +38,7 @@
 
 ;; I saw that straight loaded use-package to take advantage of the
 ;; use-package syntax which is often how things are documented.
+;; (setq package-enable-at-startup nil)
 (straight-use-package 'project)
 (straight-use-package 'use-package)
 (defvar use-package-always-ensure t)
@@ -96,7 +97,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :extend nil :overline nil :underline nil :slant normal :weight normal :height 161 :width normal :foundry "nil" :family "Hack Nerd Font Mono")))))
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :extend nil :overline nil :underline nil :slant normal :weight regular :height 160 :width normal :foundry "nil" :family "MesloLGS NF")))))
 
 
 ;;; init.el ends here.
@@ -107,7 +108,8 @@
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(custom-safe-themes
-   '("c341518f5a80752f3113699a7f845dfc7299667311858e7cdfe64677d359d87e"
+   '("d12b1d9b0498280f60e5ec92e5ecec4b5db5370d05e787bc7cc49eae6fb07bc0"
+     "c341518f5a80752f3113699a7f845dfc7299667311858e7cdfe64677d359d87e"
      "5291b60ee27dfc12078f787929498ce82efe5e4d42decdbb994be80cdb2def1f"
      "ca2ce81d33e0b4bd0fdf20caefdde9cb617fec42eeeaf5cd79c80d630bd5cf6a"
      "0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1"
@@ -196,7 +198,6 @@
      "1a1ac598737d0fcdc4dfab3af3d6f46ab2d5048b8e72bc22f50271fd6d393a00"
      "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644"
      "0c860c4fe9df8cff6484c54d2ae263f19d935e4ff57019999edbda9c7eda50b8" default))
- '(menu-bar-mode nil)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
 (put 'downcase-region 'disabled nil)
