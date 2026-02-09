@@ -41,7 +41,7 @@
   (doom-themes-org-config)
 
 :hook
-(emacs-startup . (lambda () (load-theme 'doom-opera t))))
+(emacs-startup . (lambda () (load-theme 'doom-sourcerer t))))
 
 (provide 'demacs-themes)
 

@@ -25,6 +25,10 @@
 ;;; Code:
 
 
+;; (use-package highlight-doxygen
+;;   :straight t
+;;   :hook (prog-mode . highlight-doxygen-mode))
+
 (use-package yaml-mode
   :straight t
   :mode (("\\.yaml\\'" . yaml-mode)

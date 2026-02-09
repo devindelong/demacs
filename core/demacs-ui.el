@@ -143,6 +143,7 @@
 ;; Doom modeline
 (use-package doom-modeline
   :straight t
+  :init (doom-modeline-mode 1)
   :config
   (column-number-mode)
   (size-indication-mode)
@@ -153,9 +154,7 @@
         doom-modeline-major-mode-color-icon t
         doom-modeline-lsp t
         doom-modeline-env-version t
-        )
-  :hook
-  (after-init . doom-modeline-mode))
+        ))
 
 
 ;; -----------------------------------------------------------------------------

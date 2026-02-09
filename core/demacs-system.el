@@ -361,6 +361,7 @@
 ;; Completion. Gives us the standard dropdown as-you-type of modern IDEs.
 (use-package company
   :straight t
+  :config (global-company-mode 1)
   :init
   (add-hook 'after-init-hook 'global-company-mode))
 
@@ -385,12 +386,13 @@
 (use-package company-jedi
   :straight t
   :after company)
-(add-to-list 'company-backends 'company-jedi)
+;; (add-to-list 'company-backends ')
+(add-to-list 'company-backends '(company-jedi company-capf company-dabbrev-code))
 
 
 ;; Adding the dabbrev-code backend becasue company was not auto-completing code
 ;; from the current working project or source directory.
-(add-to-list 'company-backends '(company-dabbrev-code))
+;; (add-to-list 'company-backends '(company-dabbrev-code ))
 
 
 ;; -----------------------------------------------------------------------------

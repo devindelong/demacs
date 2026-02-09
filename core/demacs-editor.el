@@ -123,7 +123,7 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 ;; Turn on electric pair mode for now.
-;; (add-hook 'prog-mode-hook #'electric-pair-mode)
+(add-hook 'prog-mode-hook #'electric-pair-mode)
 
 ;; Only add line numbers when editing code.
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
